@@ -68,6 +68,8 @@ def text_objects(text, font, color):
 
 def crash(score):
 	crash = True
+	pygame.image.save(gameDisplay,"last_frame.png")
+	last_frame = pygame.image.load("last_frame.png")
 
 	fade = pygame.Surface((WIDTH, HEIGHT))
 	fade.fill((0, 0, 0))
@@ -81,9 +83,10 @@ def crash(score):
 				pygame.quit()
 				quit()
 
-		large_font = pygame.font.SysFont('impact', 115)
+		large_font = pygame.font.Font('fonts/impact.ttf', 115)
 		TextSurf, TextRect = text_objects('You crashed', large_font, red)
 		TextRect.center = (int(WIDTH / 2), int(HEIGHT / 2 - 150))
+		gameDisplay.blit(last_frame, (0, 0))
 		gameDisplay.blit(TextSurf, TextRect)
 
 		button_centered('Play again', 380, 300, 80, 15, green, bright_green, "play")
@@ -119,7 +122,7 @@ def button(text, x, y, width, height, radius, inactive_color, active_color, acti
 		pygame.draw.circle(gameDisplay, inactive_color, (x + width - radius, y + height - radius), radius)
 
 
-	small_font = pygame.font.SysFont('bahnschrift', 60)
+	small_font = pygame.font.Font('fonts/bahnschrift.ttf', 60)
 	textSurf, textRect = text_objects(text, small_font, black)
 	textRect.center = ((x + int(width / 2)), (y - 4 + int(height / 2)))
 	gameDisplay.blit(textSurf, textRect)
@@ -129,14 +132,25 @@ def button_centered(text, y, width, height, radius, inactive_color, active_color
 	x = int(WIDTH / 2 - width / 2)
 	mouse = pygame.mouse.get_pos()
 	click = pygame.mouse.get_pressed()
+	border_size = 5
+	border_offset = border_size / 10
+	border_radius = radius + border_size
 
 	if x < mouse[0] < x + width and y < mouse[1] < y + height :
+		pygame.draw.rect(gameDisplay, black, (x + radius, y - border_radius / 4, width - radius * 2, height + border_radius * border_offset))
+		pygame.draw.rect(gameDisplay, black, (x - border_radius / 4, y + radius, width + border_radius * border_offset, height - radius * 2))
+		pygame.draw.circle(gameDisplay, black, (x + radius, y + radius), border_radius)
+		pygame.draw.circle(gameDisplay, black, (x + width - radius, y + radius), border_radius)
+		pygame.draw.circle(gameDisplay, black, (x + radius, y + height - radius), border_radius)
+		pygame.draw.circle(gameDisplay, black, (x + width - radius, y + height - radius), border_radius)
+
 		pygame.draw.rect(gameDisplay, active_color, (x + radius, y, width - radius * 2, height))
 		pygame.draw.rect(gameDisplay, active_color, (x, y + radius, width, height - radius * 2))
 		pygame.draw.circle(gameDisplay, active_color, (x + radius, y + radius), radius)
 		pygame.draw.circle(gameDisplay, active_color, (x + width - radius, y + radius), radius)
 		pygame.draw.circle(gameDisplay, active_color, (x + radius, y + height - radius), radius)
 		pygame.draw.circle(gameDisplay, active_color, (x + width - radius, y + height - radius), radius)
+
 		if click[0] == 1 and action != None:
 			if action == "play": game_loop()
 			elif action == "continue": pause = False
@@ -152,7 +166,7 @@ def button_centered(text, y, width, height, radius, inactive_color, active_color
 		pygame.draw.circle(gameDisplay, inactive_color, (x + width - radius, y + height - radius), radius)
 
 
-	small_font = pygame.font.SysFont('bahnschrift', 60)
+	small_font = pygame.font.Font('fonts/bahnschrift.ttf', 60)
 	textSurf, textRect = text_objects(text, small_font, black)
 	textRect.center = ((x + int(width / 2)), (y - 4 + int(height / 2)))
 	gameDisplay.blit(textSurf, textRect)
@@ -170,7 +184,7 @@ def game_intro():
 				quit()
 
 		gameDisplay.fill(white)
-		large_font = pygame.font.SysFont('bahnschrift', 115)
+		large_font = pygame.font.Font('fonts/bahnschrift.ttf', 115)
 		textSurf_title, textRect_title = text_objects("Master Race", large_font, black)
 		textRect_title.center = (int(WIDTH / 2), int(HEIGHT / 2 - 150))
 		gameDisplay.blit(textSurf_title, textRect_title)
@@ -215,12 +229,12 @@ def game_loop():
 				quit()
 
 			if event.type == pygame.KEYDOWN:
-				if event.key == pygame.K_a:	car_x_change -= car_x_speed
-				elif event.key == pygame.K_d: car_x_change += car_x_speed
+				if event.key == pygame.K_a or event.key == pygame.K_q or event.key == pygame.K_LEFT:	car_x_change -= car_x_speed
+				elif event.key == pygame.K_d or event.key == pygame.K_RIGHT: car_x_change += car_x_speed
 				elif event.key == pygame.K_ESCAPE: pause = True
 
 			if event.type == pygame.KEYUP:
-				if event.key == pygame.K_a or event.key == pygame.K_d: car_x_change = 0
+				if event.key == pygame.K_a or event.key == pygame.K_d or event.key == pygame.K_q or event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT: car_x_change = 0
 		
 		while pause:
 			for event in pygame.event.get():
@@ -233,7 +247,7 @@ def game_loop():
 					if event.key == pygame.K_ESCAPE: pause = False
 
 			gameDisplay.fill(white)
-			large_font = pygame.font.SysFont('bahnschrift', 115)
+			large_font = pygame.font.Font('fonts/bahnschrift.ttf', 115)
 			textSurf_title, textRect_title = text_objects("Paused", large_font, black)
 			textRect_title.center = (int(WIDTH / 2), int(HEIGHT / 2 - 150))
 			gameDisplay.blit(textSurf_title, textRect_title)
