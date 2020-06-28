@@ -3,6 +3,7 @@ import time
 import random
 
 # CHANGELOG
+# + NOW ON GITHUB
 # + button_centered function that displays a button in the middle of the screen (x only)
 # + Game icon
 # _ The resolution is now 1366 * 768
