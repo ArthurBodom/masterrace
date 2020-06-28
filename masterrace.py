@@ -2,12 +2,6 @@ import pygame
 import time
 import random
 
-# CHANGELOG
-# + NOW ON GITHUB
-# + button_centered function that displays a button in the middle of the screen (x only)
-# + Game icon
-# _ The resolution is now 1366 * 768
-
 WIDTH = 1366
 HEIGHT = 768
 
@@ -32,7 +26,13 @@ car_height = carImg.get_size()[1]
 gameIcon = pygame.image.load('gameIcon.png')
 pygame.display.set_icon(gameIcon)
 
-#music = pygame.mixer.Sound('music.wav')
+fond1 = pygame.image.load('fonds/fond1.png')
+fond2 = pygame.image.load('fonds/fond2.png')
+fond3 = pygame.image.load('fonds/fond3.png')
+fond4 = pygame.image.load('fonds/fond4.png')
+fond5 = pygame.image.load('fonds/fond5.png')
+fonds = (fond1, fond2, fond3, fond4, fond5)
+
 pygame.mixer.music.set_volume(0.2)
 pygame.mixer.music.load('music.wav')
 
@@ -200,6 +200,8 @@ def game_loop():
 
 	score = 0
 
+	fond_index = random.randrange(0, len(fonds) - 1)
+
 	best_score_file = open("best_score.txt", "r")
 	best_score = best_score_file.read()
 
@@ -219,7 +221,6 @@ def game_loop():
 
 			if event.type == pygame.KEYUP:
 				if event.key == pygame.K_a or event.key == pygame.K_d: car_x_change = 0
-
 		
 		while pause:
 			for event in pygame.event.get():
@@ -245,7 +246,7 @@ def game_loop():
 
 		car_x += car_x_change
 
-		gameDisplay.fill(white)
+		gameDisplay.blit(fonds[fond_index], (0, 0))
 		things(thing_startx, thing_starty, thing_width, thing_height, thing_color)
 		thing_starty += thing_speed
 		car(car_x, car_y)
