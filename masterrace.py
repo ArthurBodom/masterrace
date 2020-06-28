@@ -26,7 +26,7 @@ pygame.init()
 gameDisplay = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Master Race')
 clock = pygame.time.Clock()
-carImg = pygame.image.load('car.png')
+carImg = pygame.image.load('mv.png')
 car_width = carImg.get_size()[0]
 car_height = carImg.get_size()[1]
 gameIcon = pygame.image.load('gameIcon.png')
